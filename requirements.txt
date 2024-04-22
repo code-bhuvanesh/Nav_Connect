@@ -1,0 +1,6 @@
+﻿channels==4.0.0
+daphne==4.0.0
+Django==4.2.6
+djangorestframework==3.14.0
+Pillow==10.0.1
+psycopg2-binary~=2.9.3

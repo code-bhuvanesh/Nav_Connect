@@ -1,0 +1,90 @@
+id,route_name,busno,Vehicle,name,phone_number,email,password
+0,"Saligramam-(via)-Nandanam Signal-Venkatnarayana Road-
+Panagal Park-Duraisamy Sub Way-Brindavanam Street-West
+Mambalam-AVM Signal-Madhyakailash-Perungudi",31,AK7407,GEORGE,9500074637,george.bus@sisthub.com,12345678
+1,"Chinmaya Nagar-(via)- Avichi School - Meetupalayam -
+Seenuvasa Theater- Kannamapettai- CIT Nagar- Gurunanak
+College -Thandeeswaram",41,AK7421,ANNAPPAN,7299528779,annappan.bus@sisthub.com,12345678
+2,"Kodambakkam Power House-(via)-B.B.C-
+KodambakkamMeenakshi College- T.Nagar Bus Stand- CIT Nagar
+- Hyundai Show Room- Saidapet- Chinnamalai- Anna University  -
+I.I.T",14,AS3219,E.HARI,9551200768,ehari.bus@sisthub.com,12345678
+3,"7th Avenue Sangam Hotel-(via)-Blue Tank-Ekkatuthangal-
+Taramani-Perungudi-Velacherry Bye Pass",29,AK1026,KUMARESAN,8072921246,kumaresan.bus@sisthub.com,12345678
+4,"SRP Tools –(Via)-Kanthanchavadi-Thuraipakkam Toll Gate-
+Karapakkam-PTC-Mettukuppam-RRE-Jain College",68,AA7998,MOORTHY,7845236757,moorthy.bus@sisthub.com,12345678
+5,"Solinganallur ECR Tollgate-(via)-Ponniyamman Temple-HP
+Petrol bunk",90,CY6234,RAMESH,9159696959,ramesh.bus@sisthub.com,12345678
+6,"Saidapet-(Via)-Chinnamalai-Velacherry Bye Pass-Baby Nagar-
+Taramani-SRP Tools-Perungudi-PTC-Karapakkam-OMR",75,J1266,MANJAPPAN,9962729515,manjappan.bus@sisthub.com,12345678
+7,"Karapakkam-(Via)-Solinganallur-Ponniyamman Temple-HP
+Petrol bunk",95,BW3030,R.BALAMURUGAN,8608731764,rbalamurugan.bus@sisthub.com,12345678
+8,"Sholinganallur ECR TollGate-(via)-PonniyammanKoil-Cognizant-
+Aavin",71,AB1797,MUNUSAMY,9677055964,munusamy.bus@sisthub.com,12345678
+9,"Sholinganallur ECR TollGate-(via)-PonniyammanKoil-Cognizant-
+Aavin",70,BZ2211,GOPI,9176487044,gopi.bus@sisthub.com,12345678
+10,"Thandeeswaram-(via)- Baby Nagar - Tansi Nagar- Taramani-
+Perungudi- Jain College- Mettukuppam-Karapakkam-OMR",43,AS7926,P.MAARIMUTHU,9941285789,pmaarimuthu.bus@sisthub.com,12345678
+11,"Ennore-(via)- Ernavur - Ajax- Rajakadai- Thandayarpet -
+Kasimedu- Kalmandabam",30,AF9363,NAGARAJ,9003764435,nagaraj.bus@sisthub.com,12345678
+12,"Thiruvotriyur-(via)-Ajax - Thandayarpet - Royapuram - Beach
+Station Parrys Corner",28,AD8799,NIRMAL,9123518260,nirmal.bus@sisthub.com,12345678
+13,"Thandayarpet Mani Koondu-(via)- Appollo Hospital   - Maharani-
+Mint- Santhome- Pattinambakkam",52,A1617,"S.DHATCHINAMOORTH
+Y",9543134134,"sdhatchinamoorth
+y.bus@sisthub.com",12345678
+14,"Thandayarpet Mani Koondu-(via)- Appollo Hospital   - Maharani-
+Mint- Santhome- Pattinambakkam",27,AU9969,JAWAHAR,9003223170,jawahar.bus@sisthub.com,12345678
+15,"Thiruvotriyur-(via)-Ajax - Thandayarpet - Royapuram - Beach
+Station-Light House-Santhome-Pattinambakkam-Sathya studio",104,AD8979,KARTHICK,9150573275,karthick.bus@sisthub.com,12345678
+16,"Thandayarpet Mani Koondu-(via)- Appollo Hospital   - Maharani-
+Mint-Light House-Santhome- Pattinambakkam-MRC Nagar-ECR",102,AU9888,KATHIRAVAN,9500327652,kathiravan.bus@sisthub.com,12345678
+17,"Villivakkam -(via)-  Annapoorna-Ice House- Rathna Cafe -
+VivekanandarIllam - Santhome –Pattinambakkam-Adyar-ECR",4,AK9562,MUTHU,9004457115,muthu.bus@sisthub.com,12345678
+18,"Villivakkam-(via)- Nadamuni Theater- Noor Hotel - Kellys -
+Egmore- Purasaivakkan- ECR",5,AU3357,MURALI,9944378919,murali.bus@sisthub.com,12345678
+19,"Valluvarkottam-(via)- Stella Marrys College- Luz Corner-
+Mylapore- Mandaveli- Sathya Studio- Adyar-Thiruvanmaiyur-
+V.G.P-ECR",7,AD8997,T.PALANI,9710484151,tpalani.bus@sisthub.com,12345678
+20,"Madhavaram Post Office-(via)- Moolakadai - M.R Nagar- M.K.B
+Nagar - Vyasarpadi- Waltax Road- Central-Royapet-
+Pattinambakkam-Santhome-Adyar-ECR",9,AH4537,VINOTH,8825893916,vinoth.bus@sisthub.com,12345678
+21,"Madhavaram Post Office-(via)- Moolakadai - M.R Nagar- M.K.B
+Nagar - Vyasarpadi- Waltax Road- Central-Royapet-
+Pattinambakkam-Santhome-Adyar-ECR",10,CY6171,M.SUBURAJ,9710803669,msuburaj.bus@sisthub.com,12345678
+22,"AmeerMahal-(via)- Russian Emforce - Ajantha- Royapetah-
+Santhome- Pattinambakkam- Sathya studio-ECR",58,AJ2326,KHAJA MOHIDEEN,8754448206,khaja mohideen.bus@sisthub.com,12345678
+23,Besant Nagar-(via)- Vannathurai - Thiruvanmiyur-V.G.P,109,Z4110,J.D.RAJA,9941113402,jdraja.bus@sisthub.com,12345678
+24,"Uthandi Toll Gate-(via)-Cognizant-Aavin-Aloft Hotel-ECR Toll Gate-
+PrathiyankaraKoil-ECR Water Tank-Panaiyur",44,BW9690,PURUSOTHAMAN,8939254558,purusothaman.bus@sisthub.com,12345678
+25,Thiruvanmiyur-(via)-V.G.P,76,AZ6099,K.SUBRAMANIAN,9489249935,ksubramanian.bus@sisthub.com,12345678
+26,Thiruvanmiyur-(via)-V.G.P,64,AC5595,N.V.RAJEEVAN,8124223597,nvrajeevan.bus@sisthub.com,12345678
+27,Adyar Telephone Exchange-(Via)-Thiruvanmiyur-Kottivakkam-V.G.P,88,BZ2040,GANESAN,9941113402,ganesan.bus@sisthub.com,12345678
+28,"Thirunindravur-(via)- Pattabiram  Jaya College- Hindu College-
+Govarthanagiri - Nerkundrum- Maduravoyal-Koyambedu",1,AD7476,A.SARAVANAN,7871368888,asaravanan.bus@sisthub.com,12345678
+29,"Avadi-(Via)-Seenarikuppam-ACS College-Nerkundram-
+Maduravoyul-Koyambedu-Vadapalani-Velacherry  Bye pass",65,AD8790,R.GOPI,9943778015,rgopi.bus@sisthub.com,12345678
+30,"Avadi-(via)- AvadiMurugappa Polytechnic  Thirumullaivoyal-
+Ambattur O.T- Ambattur- Koyambedu- MMDA-Vadapalani-",8,Z7556,MURUGAN,7358552328,murugan.bus@sisthub.com,12345678
+31,"Muthapudupet -(via)- Mugapair West - Golden Flats- DAV School-
+Krishna Nagar - Collector Nagar-  Thirumangalam-  Koyambedu-
+Velacherry Bye Pass",3,Y0996,A.ROBINSON,9566228166,arobinson.bus@sisthub.com,12345678
+32,"Mugapair East-(via)-7H Bus Stand - TNSC Bank- J.J Nagar Police
+Station- Collector Nagar--Thiru Nagar- Jai Nagar -Velacherry Bye
+Pass-",6,AD7737,N.GOPAL,9080221856,ngopal.bus@sisthub.com,12345678
+33,"Ambattur-(Via)-Mugapair East-Koyambedu-MMDA-Vadapalani-
+Ashok Nagar-Ekkatuthangal-Velacherry Bye Pass -OMR",2,AD7287,L.RAMESH,9444472182,lramesh.bus@sisthub.com,12345678
+34,"Koyambedu (Via)-MMDA-Vadapalani-Ashok Nagar-Ekkatuthangal-
+Velacherry Bye pass",42,AF6076,THIRISANGU,9524386938,thirisangu.bus@sisthub.com,12345678
+35,"Thiruvallur-(via)- Manavalan Nagar - Poonamallee-
+Kummananchavadi- Ayyapanthangal- Ramavaram -Butt Road",21,AD7377,A.FRANCIS,9841104999,afrancis.bus@sisthub.com,12345678
+36,"Thiruvallur-(via)- Manavalan Nagar - Poonamallee-
+Kummananchavadi- Ayyapanthangal- Ramavaram -Butt Road",22,AK6933,RANJITH,8946005721,ranjith.bus@sisthub.com,12345678
+37,"Poonamallee-(via)- Ayyapanthangal - Karayanchavadi- Porur Signal-
+Mugalivakkam- Ramavaram- Butt Road-Baby Nagar",18,A3111,KARTHICK,9500021637,karthick.bus@sisthub.com,12345678
+38,"Poonamallee-(via)- Karayanchavadi - Porur Signal- Mugalivakkam -
+Velacherry Railway Station- Thandeeswaram",26,Z9264,BALAVENDRAN,9884898584,balavendran.bus@sisthub.com,12345678
+39,"Porur-(via)- Lakshmi Nagar - Valasaravakkam- Alwarthiru Nagar-
+Kesavarthini-Virugambakkam-Velacherry Bye Pass",46,Z7968,MOHAN,9962669492,mohan.bus@sisthub.com,12345678
+40,"K.K.Nagar-(via)- Pondicherry Guest House - Udayam- Kasi - Guindy-
+Velacherry Bye Pass-Thuraipakkam Bye Pass",15,CY6585,N.SIVASANKAR,9841566676,nsivasankar.bus@sisthub.com,12345678
