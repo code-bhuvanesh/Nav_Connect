@@ -45,7 +45,7 @@ class BusLocationConsumer(WebsocketConsumer):
         
 
     def receive(self, text_data):
-        # print(text_data)
+        print(text_data)
         # self.send(text_data+"from server")
         data = json.loads(text_data)
         current_lat = data["lat"]
