@@ -5,7 +5,7 @@ on: [push]
 env:
   #
   DJANGO_TUTORIAL_API_IMAGE: ghcr.io/$(echo $GITHUB_REPOSITORY | tr '[:upper:]' '[:lower:]')/store
-  DJANGO_TUTORIAL_NGINX_IMAGE: ghcr.io/$(echo $GITHUB_REPOSITORY | tr '[:upper:]' '[:lower:]')/nginx
+#   DJANGO_TUTORIAL_NGINX_IMAGE: ghcr.io/$(echo $GITHUB_REPOSITORY | tr '[:upper:]' '[:lower:]')/nginx
   REGISTRY: ghcr.io
 
 jobs:
@@ -20,7 +20,7 @@ jobs:
       - name: Set environment variables to .env
         run: |
           echo "DJANGO_TUTORIAL_API_IMAGE=$(echo ${{env.DJANGO_TUTORIAL_API_IMAGE}} )" >> $GITHUB_ENV
-          echo "DJANGO_TUTORIAL_NGINX_IMAGE=$(echo ${{env.DJANGO_TUTORIAL_NGINX_IMAGE}} )" >> $GITHUB_ENV
+        #   echo "DJANGO_TUTORIAL_NGINX_IMAGE=$(echo ${{env.DJANGO_TUTORIAL_NGINX_IMAGE}} )" >> $GITHUB_ENV
       - name: Log in to GitHub Packages
         env:
           PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
@@ -29,7 +29,7 @@ jobs:
       - name: Pull images
         run: |
           docker pull ${{ env.DJANGO_TUTORIAL_API_IMAGE }} || true
-          docker pull ${{ env.DJANGO_TUTORIAL_NGINX_IMAGE }} || true
+        #   docker pull ${{ env.DJANGO_TUTORIAL_NGINX_IMAGE }} || true
       - name: Build images
         id: build-images
         run: |
@@ -37,7 +37,7 @@ jobs:
       - name: Push images
         run: |
           docker push ${{ env.DJANGO_TUTORIAL_API_IMAGE }}
-          docker push ${{ env.DJANGO_TUTORIAL_NGINX_IMAGE }}
+        #   docker push ${{ env.DJANGO_TUTORIAL_NGINX_IMAGE }}
   checking-secrets:
     name: Checking secrets
     runs-on: ubuntu-latest
