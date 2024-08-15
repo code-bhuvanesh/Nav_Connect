@@ -9,6 +9,7 @@ from django.db.models import Q
 import requests as httpreq
 
 
+
 class DriverView(APIView):
     def get(self, request):
         drivers = Driver.objects.all()
@@ -46,8 +47,6 @@ class DriverView(APIView):
         driver = Driver.objects.get(id=pk)
         driver.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-   
 
 #check if the driver not allocated to any bus
 
