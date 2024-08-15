@@ -30,7 +30,7 @@ jobs:
       - name: Build images
         id: build-images
         run: |
-          docker-compose -f docker-compose.yml build
+          docker-compose up
       - name: Push images
         run: |
           docker push ${{ env.DJANGO_TUTORIAL_API_IMAGE }}
