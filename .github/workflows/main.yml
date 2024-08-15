@@ -31,9 +31,9 @@ jobs:
         id: build-images
         run: |
           docker compose -f docker-compose.yml build
-      - name: Push images
-        run: |
-          docker push ${{ env.DJANGO_TUTORIAL_API_IMAGE }}
+    #   - name: Push images
+    #     run: |
+    #       docker push ${{ env.DJANGO_TUTORIAL_API_IMAGE }}
   checking-secrets:
     name: Checking secrets
     runs-on: ubuntu-latest
