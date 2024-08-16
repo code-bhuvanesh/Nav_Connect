@@ -41,7 +41,7 @@ jobs:
 
       - name: Deploy to AWS EC2
         run: |
-          scp -o StrictHostKeyChecking=no docker-compose.prod.yml ${{ secrets.AWS_HOST_USER }}@${{ secrets.AWS_EC2_IP_ADDRESS }}:~/docker-compose.yml
+          scp -o StrictHostKeyChecking=no docker-compose.yml ${{ secrets.AWS_HOST_USER }}@${{ secrets.AWS_EC2_IP_ADDRESS }}:~/docker-compose.yml
           ssh -o StrictHostKeyChecking=no ${{ secrets.AWS_HOST_USER }}@${{ secrets.AWS_EC2_IP_ADDRESS }} << 'EOF'
             docker-compose -f ~/docker-compose.yml pull
             docker-compose -f ~/docker-compose.yml up -d --build
