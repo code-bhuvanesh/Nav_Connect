@@ -11,6 +11,7 @@ geometry = "}_tnA_kzgNTBIyC@q@?_AFaBZ{DPcBLwAJu@LkBRmCb@kAzAiFDyACi@MkM?w@Hs@TmA
 cordinates = polyline.decode(geometry, 5)
 # print(cordinates)
 
+
 async def ws_client():
     print("WebSocket: Client Connected.")
     # url = "ws://192.168.29.180:8000/ws/buslocation/2"
