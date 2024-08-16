@@ -1,92 +1,46 @@
-name: Continuous Integration and Delivery
+name: CI/CD Pipeline
 
 on: [push]
 
 env:
-  #
-  DJANGO_TUTORIAL_API_IMAGE: ghcr.io/$(echo $GITHUB_REPOSITORY | tr '[:upper:]' '[:lower:]')
+  DJANGO_TUTORIAL_API_IMAGE: ghcr.io/${{ github.repository }}:latest
   REGISTRY: ghcr.io
 
 jobs:
   build:
-    name: Build the Docker Image
+    name: Build and Push Docker Image
     runs-on: ubuntu-latest
 
     steps:
-      - name: checkout main
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set environment variables to .env
-        run: |
-          echo "DJANGO_TUTORIAL_API_IMAGE=$(echo ${{env.DJANGO_TUTORIAL_API_IMAGE}} )" >> $GITHUB_ENV
-      - name: Log in to GitHub Packages
-        env:
-          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-        run: echo ${PERSONAL_ACCESS_TOKEN} | docker login ghcr.io -u ${{ secrets.NAMESPACE }} --password-stdin
+      - name: Log in to GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Pull images
-        run: |
-          docker pull ${{ env.DJANGO_TUTORIAL_API_IMAGE }} || true
-      - name: Build images
-        id: build-images
-        run: |
-          docker compose -f docker-compose.yml build
-    #   - name: Push images
-    #     run: |
-    #       docker push ${{ env.DJANGO_TUTORIAL_API_IMAGE }}
-  checking-secrets:
-    name: Checking secrets
-    runs-on: ubuntu-latest
-    needs: build
-    outputs:
-      secret_key_exists: ${{steps.check_secrets.outputs.defined}}
-    steps:
-      - name: Check for Secrets availabilities
-        id: check_secrets
-        shell: bash
-        run: |
-          if [[ -n "${{ secrets.PRIVATE_KEY }}" && -n "${{secrets.AWS_EC2_IP_ADDRESS}}" && -n "${{secrets.AWS_HOST_USER}}" ]]; then
-            echo "defined=true" >> $GITHUB_OUTPUT;
-          else
-            echo "defined=false" >> $GITHUB_OUTPUT;
-          fi
+      - name: Build Docker Image
+        run: docker build -t ${{ env.DJANGO_TUTORIAL_API_IMAGE }} .
+
+      # - name: Push Docker Image
+      #   run: docker push ${{ env.DJANGO_TUTORIAL_API_IMAGE }}
+
   deploy:
     name: Deploy to AWS EC2
     runs-on: ubuntu-latest
-    needs: checking-secrets
-    if: needs.checking-secrets.outputs.secret_key_exists == 'true'
+    needs: build
     steps:
-      - name: Checkout main
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Add environment variables to .env
-        run: |
-          echo DJANGO_TUTORIAL_API_IMAGE=${{ env.DJANGO_TUTORIAL_API_IMAGE }} >> .env
-          echo NAMESPACE=${{ secrets.NAMESPACE }} >> .env
-          echo PERSONAL_ACCESS_TOKEN=${{ secrets.PERSONAL_ACCESS_TOKEN }} >> .env
-      - name: Debug SSH Key
-        run: |
-          echo "Key length: $(echo "${{ secrets.PRIVATE_KEY }}" | wc -c)"
-      - name: Add the private SSH key to the ssh-agent
-        env:
-          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-        run: |
-          mkdir -p ~/.ssh
-          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-          ssh-add - <<< "${{ secrets.PRIVATE_KEY }}"
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.8.1
+        with:
+          ssh-private-key: ${{ secrets.PRIVATE_KEY }}
 
-      - name: Deploy images on AWS EC2
-        env:
-          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-
+      - name: Deploy to AWS EC2
         run: |
-          scp -o StrictHostKeyChecking=no -r ./.env ./docker-compose.prod.yml ${{secrets.AWS_HOST_USER}}@${{ secrets.AWS_EC2_IP_ADDRESS }}:
-          ssh -o StrictHostKeyChecking=no ${{secrets.AWS_HOST_USER}}@${{ secrets.AWS_EC2_IP_ADDRESS }} << EOF
-              docker-compose down --rmi all -v
-              docker login ghcr.io -u ${{secrets.NAMESPACE}} -p ${{secrets.PERSONAL_ACCESS_TOKEN}}
-              docker pull $DJANGO_TUTORIAL_API_IMAGE
-              docker pull $DJANGO_TUTORIAL_NGINX_IMAGE
-              docker-compose --env-file=.env -f docker-compose.prod.yml up -d --build
-              docker logout
+          scp -o StrictHostKeyChecking=no docker-compose.prod.yml ${{ secrets.AWS_HOST_USER }}@${{ secrets.AWS_EC2_IP_ADDRESS }}:~/docker-compose.yml
+          ssh -o StrictHostKeyChecking=no ${{ secrets.AWS_HOST_USER }}@${{ secrets.AWS_EC2_IP_ADDRESS }} << 'EOF'
+            docker-compose -f ~/docker-compose.yml pull
+            docker-compose -f ~/docker-compose.yml up -d --build
           EOF
