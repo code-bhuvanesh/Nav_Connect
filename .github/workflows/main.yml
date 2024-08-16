@@ -64,6 +64,9 @@ jobs:
           echo DJANGO_TUTORIAL_API_IMAGE=${{ env.DJANGO_TUTORIAL_API_IMAGE }} >> .env
           echo NAMESPACE=${{ secrets.NAMESPACE }} >> .env
           echo PERSONAL_ACCESS_TOKEN=${{ secrets.PERSONAL_ACCESS_TOKEN }} >> .env
+      - name: Debug SSH Key
+        run: |
+          echo "Key length: $(echo "${{ secrets.PRIVATE_KEY }}" | wc -c)"
       - name: Add the private SSH key to the ssh-agent
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
@@ -72,9 +75,7 @@ jobs:
           ssh-agent -a $SSH_AUTH_SOCK > /dev/null
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           ssh-add - <<< "${{ secrets.PRIVATE_KEY }}"
-      - name: Debug SSH Key
-        run: |
-          echo "Key length: $(echo "${{ secrets.PRIVATE_KEY }}" | wc -c)"
+
       - name: Deploy images on AWS EC2
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
