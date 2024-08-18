@@ -1,0 +1,48 @@
+name: CI/CD Pipeline
+
+on: [push]
+
+env:
+  DJANGO_TUTORIAL_API_IMAGE: ghcr.io/${{ github.repository }}:latest
+  REGISTRY: ghcr.io
+
+jobs:
+  build:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Log in to GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build Docker Image
+        run: docker build -t ${{ env.DJANGO_TUTORIAL_API_IMAGE }} .
+
+      # - name: Push Docker Image
+      #   run: docker push ${{ env.DJANGO_TUTORIAL_API_IMAGE }}
+
+  deploy:
+    name: Deploy to AWS EC2
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Create SSH key
+        env:
+          SSH_PRIVATE_KEY: ${{secrets.PRIVATE_KEY}}
+        run: |
+          echo "$SSH_PRIVATE_KEY" > private.key
+          sudo chmod 400 private.key
+
+      - name: Deploy to AWS EC2
+        run: |
+          scp -o StrictHostKeyChecking=no docker-compose.yml ${{ secrets.AWS_HOST_USER }}@${{ secrets.AWS_EC2_IP_ADDRESS }}:~/docker-compose.yml
+          ssh -o StrictHostKeyChecking=no ${{ secrets.AWS_HOST_USER }}@${{ secrets.AWS_EC2_IP_ADDRESS }} << 'EOF'
+            docker-compose -f ~/docker-compose.yml pull
+            docker-compose -f ~/docker-compose.yml up -d --build
+          EOF

@@ -9,6 +9,7 @@ from django.db.models import Q
 import requests as httpreq
 
 
+
 class DriverView(APIView):
     def get(self, request):
         drivers = Driver.objects.all()
@@ -41,14 +42,71 @@ class DriverView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
-        try:
-            driver = Driver.objects.get(id=pk)
-            driver.delete()  # This will also delete the associated User due to CASCADE
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        except Driver.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        driver = Driver.objects.get(id=pk)
+        driver.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+   
+
+#check if the driver not allocated to any bus
 
 
+# class BusCreation(APIView):
+#     def post(self, request):
+#         serializer = BusCreationSerializer(data=request.data)
+#         if serializer.is_valid():
+#             bus_no = serializer.validated_data['bus_no']
+#             driver = Driver.objects.all()[0]
+#             bus = Bus.objects.create(busno=bus_no, driver=driver)
+            # routes_data = serializer.validated_data['routes']
+            # print(Driver.objects.all())
+            # location_bus = Location.objects.create(current_latitude=0, current_longitude=0)
+            # for route_data in routes_data:
+            #     routename = route_data['route_name']
+            #     order = route_data['order']
+            #     lat = route_data['lat']
+            #     lang = route_data['lang']
+            #     location = Location.objects.create(current_latitude=lat, current_longitude=lang)
+            #     route = SubRoutes.objects.create(route_name=routename, order=order, location=location,bus_id=bus.id)
+        #     return Response("Bus and routes created successfully", status=status.HTTP_201_CREATED)
+        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+# class BusDetails(APIView):
+#     def get(self, request):
+#         buses = Bus.objects.all()
+#         bus_data = []
+#         for bus in buses:
+#             driver_name = bus.driver.name 
+#             bus_lat = bus.location.current_latitude 
+#             bus_lang = bus.location.current_longitude 
+            
+#             routes_data = []
+#             routes = Routes.objects.filter(bus_id=bus.id)
+#             for route in routes:
+#                 route_data = {
+#                     "route_name": route.route_name,
+#                     "order": route.order,
+#                     "lat": route.location.current_latitude,
+#                     "lang": route.location.current_longitude
+#                 }
+#                 routes_data.append(route_data)
+            
+#             bus_details = {
+#                 "bus_id": bus.id,
+#                 "bus_no": bus.busno,
+#                 "driver_id": bus.driver.id,
+#                 "driver_name": driver_name,
+#                 "bus_lat": bus_lat,
+#                 "bus_lang": bus_lang,
+#                 "routes": routes_data
+#             }
+#             bus_data.append(bus_details)
+#         newBuses = getBusDetails()
+#         print("newBuses")
+#         bus_data += newBuses
+#         print(bus_data)
+#         return Response(bus_data)
+    
 
 class CreateBus(APIView):
     def post(self, request):
