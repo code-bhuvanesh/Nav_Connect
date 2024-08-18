@@ -4,14 +4,14 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
     class Role(models.TextChoices):
         ADMIN = 'ADMIN' , 'Admin'
-        DRIVER = 'driver', 'Driver'
+        DRIVER = 'DRIVER', 'Driver'
         PASSENGER = 'passenger', 'Passenger'
     user_type = models.CharField(max_length=20, choices=Role.choices)
     
 class Driver(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    phone_number = models.CharField(max_length=15)      
+    phone_number = models.CharField(max_length=10)      
 
 class Location(models.Model):
     current_latitude = models.DecimalField(max_digits=9, decimal_places=6, default=0.0)
