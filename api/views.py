@@ -7,6 +7,7 @@ from .models import Driver, Bus, LocationGeo, Routes, Location, SubRoutes, User
 from routestTest import getBusDetails 
 from django.db.models import Q
 import requests as httpreq
+from django.shortcuts import get_object_or_404
 
 
 
@@ -45,80 +46,40 @@ class DriverView(APIView):
         driver = Driver.objects.get(id=pk)
         driver.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-   
-
-#check if the driver not allocated to any bus
-
-
-# class BusCreation(APIView):
-#     def post(self, request):
-#         serializer = BusCreationSerializer(data=request.data)
-#         if serializer.is_valid():
-#             bus_no = serializer.validated_data['bus_no']
-#             driver = Driver.objects.all()[0]
-#             bus = Bus.objects.create(busno=bus_no, driver=driver)
-            # routes_data = serializer.validated_data['routes']
-            # print(Driver.objects.all())
-            # location_bus = Location.objects.create(current_latitude=0, current_longitude=0)
-            # for route_data in routes_data:
-            #     routename = route_data['route_name']
-            #     order = route_data['order']
-            #     lat = route_data['lat']
-            #     lang = route_data['lang']
-            #     location = Location.objects.create(current_latitude=lat, current_longitude=lang)
-            #     route = SubRoutes.objects.create(route_name=routename, order=order, location=location,bus_id=bus.id)
-        #     return Response("Bus and routes created successfully", status=status.HTTP_201_CREATED)
-        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-# class BusDetails(APIView):
-#     def get(self, request):
-#         buses = Bus.objects.all()
-#         bus_data = []
-#         for bus in buses:
-#             driver_name = bus.driver.name 
-#             bus_lat = bus.location.current_latitude 
-#             bus_lang = bus.location.current_longitude 
-            
-#             routes_data = []
-#             routes = Routes.objects.filter(bus_id=bus.id)
-#             for route in routes:
-#                 route_data = {
-#                     "route_name": route.route_name,
-#                     "order": route.order,
-#                     "lat": route.location.current_latitude,
-#                     "lang": route.location.current_longitude
-#                 }
-#                 routes_data.append(route_data)
-            
-#             bus_details = {
-#                 "bus_id": bus.id,
-#                 "bus_no": bus.busno,
-#                 "driver_id": bus.driver.id,
-#                 "driver_name": driver_name,
-#                 "bus_lat": bus_lat,
-#                 "bus_lang": bus_lang,
-#                 "routes": routes_data
-#             }
-#             bus_data.append(bus_details)
-#         newBuses = getBusDetails()
-#         print("newBuses")
-#         bus_data += newBuses
-#         print(bus_data)
-#         return Response(bus_data)
     
 
 class CreateBus(APIView):
+    def get_object(self, pk):
+        return get_object_or_404(Bus, pk=pk)
+    
     def post(self, request):
         serializer = BusSerializer(data=request.data)
         
         if serializer.is_valid():
             bus = serializer.save()
-            bus.location = Location.objects.create();
+            bus.location = Location.objects.create()
             bus.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response({"response" : "ok" }, status=status.HTTP_201_CREATED)
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def put(self, request, pk):
+        bus = self.get_object(pk)
+        if bus is None:
+            return Response({"error": "Bus not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = BusSerializer(bus, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"response" : "ok" }, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, pk):
+        bus = self.get_object(pk)
+        bus.delete()
+        return Response({"message": "Bus deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+
+    
         
 class BusDetails(APIView):
     def get(self, request):
@@ -204,6 +165,59 @@ class CreateRoute(APIView):
             data.append(route_data)
 
         return Response(data, status=status.HTTP_200_OK)
+    
+    def delete(self, request, pk):
+        route = get_object_or_404(Routes, pk=pk)
+        Bus.objects.filter(route=route).update(route=None)
+        route.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    def put(self, request, pk):
+        route_instance = get_object_or_404(Routes, pk=pk)
+        route_serializer = RoutesSerializer(route_instance, data=request.data, partial=True)
+
+        if route_serializer.is_valid():
+            # Save the updated route instance
+            route_instance = route_serializer.save()
+            
+            # Get the subroutes data from the request
+            subroutes_data = request.data.get('subroutes', [])
+            existing_subroutes_ids = set(route_instance.subroutes_set.values_list('id', flat=True))
+            updated_subroutes_ids = set()
+
+            for subroute_data in subroutes_data:
+                subroute_id = subroute_data.get('id')
+                if subroute_id:
+                    # Update existing subroute
+                    subroute_instance = get_object_or_404(SubRoutes, id=subroute_id)
+                    subroute_serializer = SubRoutesSerializer(subroute_instance, data=subroute_data, partial=True)
+                    if subroute_serializer.is_valid():
+                        subroute_serializer.save()
+                        updated_subroutes_ids.add(subroute_id)
+                    else:
+                        return Response(subroute_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    # Create new subroute
+                    subroute_data['route'] = route_instance.id
+                    loc_data = subroute_data.get('location', {})
+                    loc_instance = Location.objects.create(
+                        current_latitude=loc_data.get('lat'),
+                        current_longitude=loc_data.get('lang')
+                    )
+                    subroute_data['location'] = loc_instance.id
+                    subroute_serializer = SubRoutesSerializer(data=subroute_data)
+                    if subroute_serializer.is_valid():
+                        subroute_serializer.save()
+                    else:
+                        return Response(subroute_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            # Delete subroutes that are no longer in the request
+            subroutes_to_delete = existing_subroutes_ids - updated_subroutes_ids
+            SubRoutes.objects.filter(id__in=subroutes_to_delete).delete()
+
+            return Response(route_serializer.data, status=status.HTTP_200_OK)
+
+        return Response(route_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
    
 class TestEsp32(APIView):
     def get(self, request):
@@ -284,6 +298,63 @@ test_route = {
 
 
 
+# class BusCreation(APIView):
+#     def post(self, request):
+#         serializer = BusCreationSerializer(data=request.data)
+#         if serializer.is_valid():
+#             bus_no = serializer.validated_data['bus_no']
+#             driver = Driver.objects.all()[0]
+#             bus = Bus.objects.create(busno=bus_no, driver=driver)
+            # routes_data = serializer.validated_data['routes']
+            # print(Driver.objects.all())
+            # location_bus = Location.objects.create(current_latitude=0, current_longitude=0)
+            # for route_data in routes_data:
+            #     routename = route_data['route_name']
+            #     order = route_data['order']
+            #     lat = route_data['lat']
+            #     lang = route_data['lang']
+            #     location = Location.objects.create(current_latitude=lat, current_longitude=lang)
+            #     route = SubRoutes.objects.create(route_name=routename, order=order, location=location,bus_id=bus.id)
+        #     return Response("Bus and routes created successfully", status=status.HTTP_201_CREATED)
+        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+# class BusDetails(APIView):
+#     def get(self, request):
+#         buses = Bus.objects.all()
+#         bus_data = []
+#         for bus in buses:
+#             driver_name = bus.driver.name 
+#             bus_lat = bus.location.current_latitude 
+#             bus_lang = bus.location.current_longitude 
+            
+#             routes_data = []
+#             routes = Routes.objects.filter(bus_id=bus.id)
+#             for route in routes:
+#                 route_data = {
+#                     "route_name": route.route_name,
+#                     "order": route.order,
+#                     "lat": route.location.current_latitude,
+#                     "lang": route.location.current_longitude
+#                 }
+#                 routes_data.append(route_data)
+            
+#             bus_details = {
+#                 "bus_id": bus.id,
+#                 "bus_no": bus.busno,
+#                 "driver_id": bus.driver.id,
+#                 "driver_name": driver_name,
+#                 "bus_lat": bus_lat,
+#                 "bus_lang": bus_lang,
+#                 "routes": routes_data
+#             }
+#             bus_data.append(bus_details)
+#         newBuses = getBusDetails()
+#         print("newBuses")
+#         bus_data += newBuses
+#         print(bus_data)
+#         return Response(bus_data)
+
+#check if the driver not allocated to any bus
 # class BusCreation(APIView):
 #     def post(self, request):
 #         serializer = BusCreationSerializer(data=request.data)

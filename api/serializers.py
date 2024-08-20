@@ -72,7 +72,6 @@ class SubRoutesSerializer(serializers.ModelSerializer):
         fields = ['id', 'route', 'route_name', 'order', 'location']
         read_only_fields = ['id']
 
-
 class RoutesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Routes
